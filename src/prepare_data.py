@@ -1,6 +1,7 @@
 import logging
 import pandas as pd
 from pathlib import Path
+from typing import Tuple
 from utils import (
     convert_datetime_to_month_period, 
     convert_period_int_to_month_period,
@@ -20,26 +21,30 @@ SCRIPT_DIR = Path(__file__).parent.resolve()
 DATA_PATH = SCRIPT_DIR.parent / "data"
 
 
-def load_data():
+def load_data() -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     df_withdrawals = pd.read_parquet(DATA_PATH / "zrive_advertiser_withdrawals.parquet")
     df_advertiser = pd.read_parquet(DATA_PATH / "zrive_dim_advertiser.parquet")
     df_monthly = pd.read_parquet(DATA_PATH / "zrive_fct_monthly_snapshot_advertiser.parquet")
 
     return df_withdrawals, df_advertiser, df_monthly
 
-def preprocess_withdrawals(df_withdrawals):
+def preprocess_withdrawals(df_withdrawals: pd.DataFrame) -> pd.DataFrame:
     df_withdrawals = convert_datetime_to_month_period(df_withdrawals, 'withdrawal_creation_date', 'withdrawal_month', True)
     df_withdrawals = add_predict_month(df_withdrawals)
     df_withdrawals = add_churn(df_withdrawals)
 
     return df_withdrawals
 
-def preprocess_monthly(df_monthly):
+def preprocess_monthly(df_monthly: pd.DataFrame) -> pd.DataFrame:
     df_monthly = convert_period_int_to_month_period(df_monthly)
 
     return df_monthly
 
-def process_target(df_monthly, df_withdrawals, df_advertiser):
+def process_target(
+        df_monthly: pd.DataFrame, 
+        df_withdrawals: pd.DataFrame, 
+        df_advertiser: pd.DataFrame
+) -> pd.DataFrame:
     return (
         df_monthly
         .pipe(add_churn_target, df_withdrawals)
@@ -49,7 +54,7 @@ def process_target(df_monthly, df_withdrawals, df_advertiser):
         .pipe(remove_inactive_periods_without_contract)
     )
 
-def add_churn(df: pd.DataFrame):
+def add_churn(df: pd.DataFrame) -> pd.DataFrame:
     CHURN_REASONS_EXCLUDED = [
         'Upselling-cambio de contrato',
         'Cambio a Bundle Online',
@@ -64,11 +69,16 @@ def add_churn(df: pd.DataFrame):
 
     return df
 
-def add_predict_month(df: pd.DataFrame, predict_col = "predict_month", withdrawal_col="withdrawal_month", n: int = 1):
-    df[predict_col] = df[withdrawal_col] - n
+def add_predict_month(
+        df: pd.DataFrame, 
+        predict_col: str = "predict_month", 
+        withdrawal_col: str = "withdrawal_month", 
+        months_to_subtract: int = 1
+) -> pd.DataFrame:
+    df[predict_col] = df[withdrawal_col] - months_to_subtract
     return df
 
-def add_churn_target(df_monthly, df_withdrawals):
+def add_churn_target(df_monthly: pd.DataFrame, df_withdrawals: pd.DataFrame) -> pd.DataFrame:
     df_target = df_monthly.merge(
         df_withdrawals[['advertiser_zrive_id', 'predict_month', 'churn']].rename(
             columns={'predict_month': 'month_period'}
@@ -81,7 +91,7 @@ def add_churn_target(df_monthly, df_withdrawals):
 
     return df_target
 
-def remove_activity_after_first_churn(df):
+def remove_activity_after_first_churn(df: pd.DataFrame) -> pd.DataFrame:
     first_churn = (
         df[df['churn'] == 1]
         .groupby('advertiser_zrive_id')['period_int']
@@ -105,7 +115,7 @@ def remove_activity_after_first_churn(df):
 
     return df_filtered
 
-def add_churn_from_advertiser_data(df_target, df_advertiser):
+def add_churn_from_advertiser_data(df_target: pd.DataFrame, df_advertiser: pd.DataFrame) -> pd.DataFrame:
     """
     Add churns for users who did not churn explicitly through withdrawals,
     but have a 'contrato_churn_date' in the advertiser data.
@@ -163,7 +173,7 @@ def add_churn_from_advertiser_data(df_target, df_advertiser):
 
     return df_target
 
-def remove_incomplete_users(df_target, latest_period=None):
+def remove_incomplete_users(df_target: pd.DataFrame, latest_period=None) -> pd.DataFrame:
     """
     Remove users who do not have churn registered and finish before the last period.
     """
@@ -186,7 +196,7 @@ def remove_incomplete_users(df_target, latest_period=None):
     
     return df_filtered
 
-def remove_inactive_periods_without_contract(df):
+def remove_inactive_periods_without_contract(df: pd.DataFrame) -> pd.DataFrame:
     """Removes rows where has_active_contract=False and no ads were published.
 
     Args:
