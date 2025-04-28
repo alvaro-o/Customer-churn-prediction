@@ -214,8 +214,10 @@ def main():
     logger.info("All datasets successfully loaded.")
 
     df_withdrawals = preprocess_withdrawals(df_withdrawals)
+    logger.info("Withdrawals data preprocessed.")
+
     df_monthly = preprocess_monthly(df_monthly)
-    logger.info("Withdrawals and monthly data preprocessed.")
+    logger.info("Monthly data preprocessed.")
 
     df_target = process_target(df_monthly, df_withdrawals, df_advertiser)
     logger.info("Target data processed.")
