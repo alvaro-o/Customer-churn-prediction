@@ -30,7 +30,8 @@ def create_time_features(df,df_advertiser):
 
     Assume first month with activity as the start date in case there is activity before the first contract
     '''
-
+    
+    #Merge datasets
     df_time_features = df.merge(df_advertiser, on='advertiser_zrive_id', how='left')
     
     #Convert to period in months
@@ -39,15 +40,18 @@ def create_time_features(df,df_advertiser):
     df_time_features['contrato_churn_date'] = pd.to_datetime(df_time_features['contrato_churn_date'], errors='coerce').dt.to_period('M')
     
     #Take first month with activity as the start date in case there is activity before the first contract
-    first_activity_date = df_time_features[~df_time_features['has_active_contract']].groupby('advertiser_zrive_id')['month_period'].min()
-    df_time_features['first_activity_date'] = df_time_features['advertiser_zrive_id'].map(first_activity_date).fillna(df_time_features['min_start_contrato_date'])
+    first_month_period = df_time_features.groupby('advertiser_zrive_id')['month_period'].min()
+    min_contrato_date = df_time_features.groupby('advertiser_zrive_id')['min_start_contrato_date'].min()
+    first_activity_date = pd.concat([first_month_period, min_contrato_date], axis=1).min(axis=1)
+    
+    df_time_features['first_activity_date'] = df_time_features['advertiser_zrive_id'].map(first_activity_date)
 
+    #Compute features
     current_date = df_time_features['month_period']
     start_date =  df_time_features['first_activity_date']
     new_start_date = df_time_features['max_start_contrato_nuevo_date']
     end_date = df_time_features['contrato_churn_date']
 
-    #Compute features
     df_time_features['tenure'] = (current_date - start_date).apply(lambda x: x.n if pd.notnull(x) else None).apply(lambda x: None if x < 0 else x)
     df_time_features['months_since_last_contract'] = (current_date - new_start_date).apply(lambda x: x.n if pd.notnull(x) else None).apply(lambda x: None if x < 0 else x)
     df_time_features['has_renewed'] = df_time_features['months_since_last_contract'].notna().astype(int)
@@ -156,7 +160,6 @@ def engineer_features(df, df_advertiser):
     features_to_aggregate = ['monthly_leads', 
                         'monthly_visits',
                         'monthly_total_invoice',
-                        'monthly_avg_ad_price',
                         'monthly_published_ads',
                         'monthly_contracted_ads',
                         'ratio_published_contracted',
