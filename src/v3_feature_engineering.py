@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Tuple
 from typing import List
 
+
 logging.basicConfig(
     level=logging.INFO,
     format="[%(asctime)s] %(levelname)s:%(name)s: %(message)s",
