@@ -23,9 +23,7 @@ logger.setLevel(logging.INFO)
 logger.addHandler(logging.StreamHandler())
 
 
-def feature_label_split(
-    df: pd.DataFrame
-) -> Tuple[pd.DataFrame, pd.Series]:
+def feature_label_split(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.Series]:
     X = df[FEATURE_COLS]
     y = df[LABEL_COL]
     return X, y
@@ -43,12 +41,14 @@ def split_train_by_period(
     train = data_set[
         (data_set["month_period"] > start) & (data_set["month_period"] <= end)
     ]
+
     logger.info(
         f"Train period: {start_dt:%Y-%m-%d} → {execution_date:%Y-%m-%d}"
         f" ({n_training_months} months)"
     )
     months = sorted(train["month_period"].unique())
     logger.info(f"Distinct months: {[str(m) for m in months]}")
+
     return train
 
 
