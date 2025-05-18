@@ -1,18 +1,18 @@
-import os
 import logging
 from joblib import load
 import xgboost as xgb
 import pandas as pd
 from src.train import feature_label_split
-from src.utils import OUTPUT_PATH, build_dataframe, evaluate_model, save_predictions
+from src.utils import (
+    OUTPUT_PATH, build_dataframe, evaluate_model, save_predictions, get_model_path
+)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 logger.addHandler(logging.StreamHandler())
 
 def main() -> None:
-    model_name = "20250518-233011_xgboost.pkl"
-    model_path = os.path.join(OUTPUT_PATH, model_name)
+    model_path, model_name = get_model_path(directory=OUTPUT_PATH)
     model: xgb.Booster = load(model_path)
     logger.info(f"Loaded model {model_name}")
 

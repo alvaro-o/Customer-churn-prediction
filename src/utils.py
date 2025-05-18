@@ -1,6 +1,7 @@
 import os
 import datetime
 import logging
+from typing import Optional, Tuple
 import pandas as pd
 from sklearn.metrics import average_precision_score, roc_auc_score
 
@@ -180,8 +181,7 @@ def save_predictions(
     dataset_name = f"{model_name}_{date.replace(':', '-')}.csv"
     filename = os.path.join(PREDICTIONS_PATH, dataset_name)
 
-    # Selección como DataFrame para usar .assign()
-    df_filtered = df[["advertiser_zrive_id"]]
+    df_filtered = df[["advertiser_zrive_id", 'month_period']]
     df_predictions = df_filtered.assign(
         model_name=model_name,
         date=date,
@@ -191,3 +191,24 @@ def save_predictions(
 
     df_predictions.to_csv(filename, index=False)
     logger.info(f"Saved predictions to {filename}")
+
+
+def get_model_path(
+    directory: str,
+    model_name: Optional[str] = None
+) -> Tuple[str, str]:
+    if model_name:
+        path = os.path.join(directory, model_name)
+        if not os.path.isfile(path):
+            raise FileNotFoundError(f"Model not found in: {path}")
+        return path
+
+    files = [model for model in os.listdir(directory) if model.endswith('.pkl')]
+
+    if not files:
+        raise FileNotFoundError(f"No .pkl found in {directory}")
+
+    files.sort(reverse=True)
+    latest_model = files[0]
+
+    return os.path.join(directory, latest_model), latest_model
