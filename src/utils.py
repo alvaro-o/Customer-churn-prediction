@@ -1,3 +1,4 @@
+import datetime
 import pandas as pd
 import logging
 import os
@@ -9,9 +10,32 @@ logger.level = logging.INFO
 consoleHandler = logging.StreamHandler()
 logger.addHandler(consoleHandler)
 
+
+N_TRAINING_MONTHS = 6
+
+LAST_TRAINING_MONTH = datetime.datetime(2024, 11, 1)
+
+N_ESTIMATORS = 150
+
+PARAMS = {
+    "objective": "binary:logistic",
+    "eval_metric": "logloss",
+    "learning_rate": 0.01,
+    "max_depth": 3,
+    "min_child_weight": 10,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "reg_alpha": 1.0,
+    "reg_lambda": 1.0,
+    "nthread": 10,
+    "random_state": 1,
+}
+
 STORAGE_PATH = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "../data/")
 )
+
+OUTPUT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../models/"))
 
 NAN_FEATURES = [
     'monthly_distinct_ads', 
@@ -83,6 +107,8 @@ FEATURE_COLS = [
     'invoice_per_lead_3_months_mean',
     'invoice_per_lead_3_months_mean_delta',
 ]
+
+LABEL_COL = "churn"
 
 
 def convert_datetime_to_month_period(df, datetime_col, new_col, drop_original=True):
