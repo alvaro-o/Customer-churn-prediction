@@ -52,14 +52,6 @@ def split_train_by_period(
     return train
 
 
-def save_model(model: Any, model_name: str) -> None:
-    os.makedirs(OUTPUT_PATH, exist_ok=True)
-    ts = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-    path = os.path.join(OUTPUT_PATH, f"{ts}_{model_name}.pkl")
-    logger.info(f"Saving model to {path}")
-    joblib.dump(model, path)
-
-
 def train_model(
     train_set: pd.DataFrame,
     n_estimators: int = N_ESTIMATORS,
@@ -78,6 +70,14 @@ def train_model(
         evals_result=evals_result,
     )
     return model, evals_result
+
+
+def save_model(model: Any, model_name: str) -> None:
+    os.makedirs(OUTPUT_PATH, exist_ok=True)
+    ts = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    path = os.path.join(OUTPUT_PATH, f"{ts}_{model_name}.pkl")
+    logger.info(f"Saving model to {path}")
+    joblib.dump(model, path)
 
 
 def train(df: pd.DataFrame) -> None:
