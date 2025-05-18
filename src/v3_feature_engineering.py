@@ -2,6 +2,9 @@ import logging
 import pandas as pd
 import numpy as np
 from pathlib import Path
+from typing import Tuple
+from typing import List
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -16,14 +19,14 @@ SCRIPT_DIR = Path(__file__).parent.resolve()
 DATA_PATH = SCRIPT_DIR.parent / "data"
 
 
-def load_data():
+def load_data() -> Tuple[pd.DataFrame, pd.DataFrame]:
     df = pd.read_parquet(DATA_PATH / "processed_data.parquet")
     df_advertiser = pd.read_parquet(DATA_PATH / "zrive_dim_advertiser.parquet")
 
     return df, df_advertiser
 
 
-def create_time_features(df,df_advertiser):
+def create_time_features(df: pd.DataFrame, df_advertiser: pd.DataFrame) -> pd.DataFrame:
     '''
     Adds the following features to the dataset: 
     tenure, months_since_last_contract, has_renewed
@@ -45,7 +48,6 @@ def create_time_features(df,df_advertiser):
     current_date = df_time_features['month_period']
     start_date =  df_time_features['first_activity_date']
     new_start_date = df_time_features['max_start_contrato_nuevo_date']
-    end_date = df_time_features['contrato_churn_date']
 
     #Compute features
     df_time_features['tenure'] = (current_date - start_date).apply(lambda x: x.n if pd.notnull(x) else None).apply(lambda x: None if x < 0 else x)
@@ -63,14 +65,14 @@ def create_time_features(df,df_advertiser):
     return df_time_features
 
 
-def create_ratios(df):
+def create_ratios(df: pd.DataFrame) -> pd.DataFrame:
     '''
     Create ratios between features
     '''
     
     df_features = df.copy()
 
-    def safe_divide(numerator, denominator):
+    def safe_divide(numerator: int, denominator: int) -> float:
         return np.where(denominator > 0, numerator / denominator, 0)
 
     df_features['monthly_total_premium_ads'] = (
@@ -123,7 +125,13 @@ def create_ratios(df):
     return df_features
 
 
-def create_agg_stats(df, features, months = 3, agg_funcs=['mean', 'std', 'min', 'max'], add_deltas=True):
+def create_agg_stats(
+        df: pd.DataFrame, 
+        features: List[str], 
+        months = 3, 
+        agg_funcs=['mean', 'std', 'min', 'max'], 
+        add_deltas=True
+) -> pd.DataFrame:
     '''
     Adds aggregate features over the last months for the features passed to the function 
     '''
@@ -149,32 +157,34 @@ def create_agg_stats(df, features, months = 3, agg_funcs=['mean', 'std', 'min', 
     return df_agg
 
 
-def engineer_features(df, df_advertiser):
+def engineer_features(df: pd.DataFrame, df_advertiser: pd.DataFrame) -> pd.DataFrame:
     df_time_features = create_time_features(df, df_advertiser)
     df_ratios = create_ratios(df_time_features)
 
-    features_to_aggregate = ['monthly_leads', 
-                        'monthly_visits',
-                        'monthly_total_invoice',
-                        'monthly_avg_ad_price',
-                        'monthly_published_ads',
-                        'monthly_contracted_ads',
-                        'ratio_published_contracted',
-                        'ratio_unique_published', 
-                        'ratio_premium_ads', 
-                        'leads_per_published_ad',
-                        'leads_per_premium_ad', 
-                        'visits_per_published_ad', 
-                        'leads_per_visit',
-                        'leads_per_shows', 
-                        'invoice_per_published_ad', 
-                        'invoice_per_lead'
-                        ]
+    features_to_aggregate = [
+        'monthly_leads', 
+        'monthly_visits',
+        'monthly_total_invoice',
+        'monthly_avg_ad_price',
+        'monthly_published_ads',
+        'monthly_contracted_ads',
+        'ratio_published_contracted',
+        'ratio_unique_published', 
+        'ratio_premium_ads', 
+        'leads_per_published_ad',
+        'leads_per_premium_ad', 
+        'visits_per_published_ad', 
+        'leads_per_visit',
+        'leads_per_shows', 
+        'invoice_per_published_ad', 
+        'invoice_per_lead'
+    ]
     
     agg_funcs = ['mean']
 
     full_engineered_dataset = create_agg_stats(
-        df_ratios, features = features_to_aggregate, months = 3, agg_funcs=agg_funcs, add_deltas=True)
+        df_ratios, features = features_to_aggregate, months = 3, agg_funcs=agg_funcs, add_deltas=True
+    )
     
     return full_engineered_dataset
 

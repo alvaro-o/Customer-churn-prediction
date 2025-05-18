@@ -7,8 +7,8 @@ __pycache__/
 *.so
 
 /data
-
-/.DS_Store
+notebooks/.DS_Store
+.DS_Store
 
 # Distribution / packaging
 .Python
@@ -164,3 +164,5 @@ cython_debug/
 #.idea/
 
 /data
+/models
+/predictions
