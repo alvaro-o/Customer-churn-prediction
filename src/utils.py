@@ -1,4 +1,88 @@
 import pandas as pd
+import logging
+import os
+
+
+logger = logging.getLogger(__name__)
+logger.level = logging.INFO
+
+consoleHandler = logging.StreamHandler()
+logger.addHandler(consoleHandler)
+
+STORAGE_PATH = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "../data/")
+)
+
+NAN_FEATURES = [
+    'monthly_distinct_ads', 
+    'monthly_avg_ad_price', 
+    'monthly_avg_ad_price_3_months_mean', 
+    'monthly_avg_ad_price_3_months_mean_delta'
+]
+
+IMPORTANT_FEATURES = ['months_since_last_contract', 'tenure']
+
+FEATURE_COLS = [
+    'monthly_published_ads',
+    'monthly_published_ads_3_months_mean',
+    'monthly_published_ads_3_months_mean_delta',
+    'monthly_unique_published_ads',
+    'monthly_contracted_ads',
+    'monthly_contracted_ads_3_months_mean',
+    'monthly_contracted_ads_3_months_mean_delta',
+    'monthly_leads',
+    'monthly_leads_3_months_mean',
+    'monthly_leads_3_months_mean_delta',
+    'monthly_visits',
+    'monthly_visits_3_months_mean',
+    'monthly_visits_3_months_mean_delta',
+    'monthly_oro_ads',
+    'monthly_plata_ads',
+    'monthly_destacados_ads',
+    'monthly_pepitas_ads',
+    'monthly_shows',
+    'monthly_total_phone_views',
+    'monthly_total_calls',
+    'monthly_total_emails',
+    'monthly_total_invoice',
+    'monthly_total_invoice_3_months_mean',
+    'monthly_total_invoice_3_months_mean_delta',
+    'monthly_unique_calls',
+    'monthly_unique_emails',
+    'monthly_unique_leads',
+    'has_renewed',
+    'monthly_total_premium_ads',
+    'ratio_published_contracted',
+    'ratio_published_contracted_3_months_mean',
+    'ratio_published_contracted_3_months_mean_delta',
+    'ratio_unique_published',
+    'ratio_unique_published_3_months_mean',
+    'ratio_unique_published_3_months_mean_delta',
+    'ratio_premium_ads',
+    'ratio_premium_ads_3_months_mean',
+    'ratio_premium_ads_3_months_mean_delta',
+    'leads_per_published_ad',
+    'leads_per_published_ad_3_months_mean',
+    'leads_per_published_ad_3_months_mean_delta',
+    'leads_per_premium_ad',
+    'leads_per_premium_ad_3_months_mean',
+    'leads_per_premium_ad_3_months_mean_delta',
+    'visits_per_published_ad',
+    'visits_per_published_ad_3_months_mean',
+    'visits_per_published_ad_3_months_mean_delta',
+    'leads_per_visit',
+    'leads_per_visit_3_months_mean',
+    'leads_per_visit_3_months_mean_delta',
+    'leads_per_shows',
+    'leads_per_shows_3_months_mean',
+    'leads_per_shows_3_months_mean_delta',
+    'invoice_per_published_ad',
+    'invoice_per_published_ad_3_months_mean',
+    'invoice_per_published_ad_3_months_mean_delta',
+    'invoice_per_lead',
+    'invoice_per_lead_3_months_mean',
+    'invoice_per_lead_3_months_mean_delta',
+]
 
 
 def convert_datetime_to_month_period(df, datetime_col, new_col, drop_original=True):
@@ -11,3 +95,23 @@ def convert_period_int_to_month_period(df, period_col='period_int', new_col='mon
     """Convert YYYYMM format to pandas monthly period"""
     df[new_col] = pd.to_datetime(df[period_col].astype(str) + '01', format='%Y%m%d').dt.to_period('M')
     return df
+
+def load_dataset() -> pd.DataFrame:
+    dataset_name = "full_data.parquet"
+    loading_file = os.path.join(STORAGE_PATH, dataset_name)
+    logger.info(f"Loading dataset from {loading_file}")
+    return pd.read_parquet(loading_file)
+
+def delete_nan_features(df: pd.DataFrame) -> pd.DataFrame:
+    return df.drop(NAN_FEATURES, axis=1)
+
+def delete_important_features(df: pd.DataFrame) -> pd.DataFrame:
+    return df.drop(IMPORTANT_FEATURES, axis=1)
+
+def build_dataframe() -> pd.DataFrame:
+    logger.info("Building dataframe")
+    return (
+        load_dataset()
+        .pipe(delete_nan_features)
+        .pipe(delete_important_features)
+    )
