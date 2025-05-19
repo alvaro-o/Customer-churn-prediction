@@ -23,7 +23,7 @@ DATA_PATH = SCRIPT_DIR.parent / "data"
 def load_data():
     df_withdrawals = pd.read_parquet(DATA_PATH / "zrive_advertiser_withdrawals.parquet")
     df_advertiser = pd.read_parquet(DATA_PATH / "zrive_dim_advertiser.parquet")
-    df_monthly = pd.read_parquet(DATA_PATH / "zrive_fct_monthly_snapshot_advertiser.parquet")
+    df_monthly = pd.read_parquet(DATA_PATH / "zrive_fct_montly_snapshot_advertiser.parquet")
 
     return df_withdrawals, df_advertiser, df_monthly
 

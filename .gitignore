@@ -164,3 +164,7 @@ cython_debug/
 #.idea/
 
 /data
+notebooks/df_advertiser.csv
+notebooks/df_monthly.csv
+notebooks/df_withdrawals.csv
+notebooks/sample_processed_data.csv
