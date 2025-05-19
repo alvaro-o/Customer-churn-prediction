@@ -2,7 +2,7 @@ import logging
 import pandas as pd
 from pathlib import Path
 from typing import Tuple
-from utils import (
+from src.utils import (
     convert_datetime_to_month_period, 
     convert_period_int_to_month_period,
 )
@@ -61,7 +61,15 @@ def add_churn(df: pd.DataFrame) -> pd.DataFrame:
         'Cambio de Contrato/propuesta/producto'
     ]
 
-    df["churn"] = (
+    valid_entries = (
+        df["withdrawal_type"].notna() & 
+        df["withdrawal_status"].notna() & 
+        df["withdrawal_reason"].notna()
+    )
+
+    df["churn"] = 0
+
+    df.loc[valid_entries, "churn"] = (
         (df["withdrawal_type"] == "TOTAL") &
         (df["withdrawal_status"] != "Denegada") &
         (~df["withdrawal_reason"].isin(CHURN_REASONS_EXCLUDED))
