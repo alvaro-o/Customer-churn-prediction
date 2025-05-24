@@ -5,6 +5,7 @@ Proyecto de predicción de Churn.
 
 Estructura del proyecto:
 
+```text
 ├── data
 │   ├── zrive_advertiser_withdrawals.parquet
 │   ├── zrive_dim_advertiser.parquet
