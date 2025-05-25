@@ -65,7 +65,7 @@ Estructura del proyecto:
 
 2. `prepare_data.py`:
     Script de limpieza de dataset & añadir target label. Basandose en el notebook `v1_dataset.ipynb`.
-   Utiliza las tablas `zrive_advertiser_withdrawals.parquet`, `zrive_dim_advertiser.parquet` y `zrive_fct_monthly_snapshot_advertiser.parquet`  para generar una tabla final `processed_data.parquet`
+   Utiliza las tablas zrive_advertiser_withdrawals.parquet, zrive_dim_advertiser.parquet y zrive_fct_monthly_snapshot_advertiser.parquet  para generar una tabla final processed_data.parquet
 
 
 3. `feature_engineering.py`:
@@ -85,9 +85,9 @@ Estructura del proyecto:
 
 ## Instrucciones
 
-Teniendo en la carpeta data las tablas `zrive_advertiser_withdrawals.parquet`, `zrive_dim_advertiser.parquet` y `zrive_fct_monthly_snapshot_advertiser.parquet` , ejecutamos prepare_data.py y se genera la tabla  `processed_data.parquet`
+Teniendo en la carpeta data las tablas zrive_advertiser_withdrawals.parquet, zrive_dim_advertiser.parquet y zrive_fct_monthly_snapshot_advertiser.parquet , ejecutamos `prepare_data.py` y se genera la tabla  processed_data.parquet
 
-Una vez tenemos esa tabla, ejecutamos feature_engineering.py y se genera la tabla full_data.parquet (la que se utiliza para entrenar)
+Una vez tenemos esa tabla, ejecutamos `feature_engineering.py` y se genera la tabla full_data.parquet (la que se utiliza para entrenar)
 
 
    
