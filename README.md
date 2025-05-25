@@ -52,7 +52,7 @@ Estructura del proyecto:
    - Primeras pruebas de entrenamiento
   
 5. `train_optimized.ipynb`:
-   Notebook de prueba de Random Forest incluyendo shap
+   Notebook de prueba de Random Forest
 
 6. `train_boosting.ipynb`:
    Notebook de entrenamiento final. Incluye sliding window, evolution of logloss comparada con numero de arboles, evolucion de curvas ROC y Pr y metricas de negocio
