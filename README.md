@@ -80,7 +80,11 @@ Estructura del proyecto:
 
 ## tests
 
-   
+1. `test_feature_engineering.py`:
+    Tests para verificar script feature_engineering.py
+
+2. `test_prepare_data.py`:
+   Test para verificar script test_prepare_data.py
 
 
 ## Instrucciones
