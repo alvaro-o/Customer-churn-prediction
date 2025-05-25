@@ -81,4 +81,13 @@ Estructura del proyecto:
 ## tests
 
    
+
+
+## Instrucciones
+
+Teniendo en la carpeta data las tablas `zrive_advertiser_withdrawals.parquet`, `zrive_dim_advertiser.parquet` y `zrive_fct_monthly_snapshot_advertiser.parquet` , ejecutamos prepare_data.py y se genera la tabla  `processed_data.parquet`
+
+Una vez tenemos esa tabla, ejecutamos feature_engineering.py y se genera la tabla full_data.parquet (la que se utiliza para entrenar)
+
+
    
