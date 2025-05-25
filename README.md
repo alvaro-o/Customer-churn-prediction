@@ -58,7 +58,7 @@ Estructura del proyecto:
    Notebook de entrenamiento final. Incluye sliding window, evolution of logloss comparada con numero de arboles, evolucion de curvas ROC y Pr y metricas de negocio
 
 
-## Scripts .py
+## src
 
 1. `utils.py`:
    Funciones & variables que utilizamos en otros .py
@@ -66,3 +66,19 @@ Estructura del proyecto:
 2. `prepare_data.py`:
     Script de limpieza de dataset & añadir target label. Basandose en el notebook `v1_dataset.ipynb`.
    Utiliza las tablas `zrive_advertiser_withdrawals.parquet`, `zrive_dim_advertiser.parquet` y `zrive_fct_monthly_snapshot_advertiser.parquet`  para generar una tabla final `processed_data.parquet`
+
+
+3. `feature_engineering.py`:
+   Añade nuevas features (antigüedad, meses desde último contrato, ratios, media últimos 3 meses, delta últimos 3 meses, etc.
+
+4. `train.py`:
+   Entrenamiento del modelo (basandose en train_boosting.ipynb)
+
+5. `inference.py`:
+   Carga el modelo entrenado y hace predicciones
+
+
+## tests
+
+   
+   
