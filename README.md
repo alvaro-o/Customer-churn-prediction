@@ -92,6 +92,6 @@ Estructura del proyecto:
 5. `python3 -m src.feature_engineering` genera la tabla full_data.parquet (la que se utiliza para entrenar)
 
 
-Una vez generado full_data.parquet ya se pueden utilizar los notebooks. El notebook de entrenamiento final es train_boosting.ipynb
+Una vez generado full_data.parquet ya se pueden utilizar los notebooks de entrenamiento y scripts de train & inference. El notebook de entrenamiento final es train_boosting.ipynb.
 
    
