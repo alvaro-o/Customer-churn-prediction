@@ -85,9 +85,13 @@ Estructura del proyecto:
 
 ## Instrucciones
 
-Teniendo en la carpeta data las tablas zrive_advertiser_withdrawals.parquet, zrive_dim_advertiser.parquet y zrive_fct_monthly_snapshot_advertiser.parquet , ejecutamos `prepare_data.py` y se genera la tabla  processed_data.parquet
+1. `poetry shell`
+2. `poetry install`
+3. Crear carpeta data y añadir las tablas zrive_advertiser_withdrawals.parquet, zrive_dim_advertiser.parquet y zrive_fct_monthly_snapshot_advertiser.parquet
+4. `python3 -m src.prepare_data` genera la tabla  processed_data.parquet
+5. `python3 -m src.feature_engineering` genera la tabla full_data.parquet (la que se utiliza para entrenar)
 
-Una vez tenemos esa tabla, ejecutamos `feature_engineering.py` y se genera la tabla full_data.parquet (la que se utiliza para entrenar)
 
+Una vez generado full_data.parquet ya se pueden utilizar los notebooks. El notebook de entrenamiento final es train_boosting.ipynb
 
    
