@@ -3,6 +3,11 @@
 ## Objective
 Predict which customers are likely to churn in a subscription-based business using historical account and transaction data.
 
+## Project Context
+This project was completed as part of Zrive School Data Science program in collaboration with a small team of students for Komorebi AI. 
+Authors: Alejandro Marcos, Álvaro Ortega, Eduardo Ezponda and Maick Mosquera
+Mentor: Guillermo Santamaría 
+
 ## Tech Stack
 Python | Pandas | scikit-learn | XGBoost | Matplotlib | Seaborn | PyTest | Poetry
 
@@ -14,12 +19,12 @@ Python | Pandas | scikit-learn | XGBoost | Matplotlib | Seaborn | PyTest | Poetr
 │   ├── zrive_dim_advertiser.parquet
 │   └── zrive_fct_monthly_snapshot_advertiser.parquet
 ├── models
+├── docs
+│   └── project_report.pdf
 ├── notebooks
+│   ├── archive
 │   ├── eda.ipynb
 │   ├── train_boosting.ipynb
-│   ├── train_optimized.ipynb
-│   ├── training_v2.ipynb
-│   ├── v1_dataset.ipynb
 │   └── v3_feature_engineering.ipynb
 ├── poetry.lock
 ├── predictions
@@ -42,12 +47,16 @@ Python | Pandas | scikit-learn | XGBoost | Matplotlib | Seaborn | PyTest | Poetr
 ## Methodology
 1. **Exploratory Data Analysis (EDA):** understand data distributions, correlations, and missing values.  
 2. **Feature Engineering:** create features like customer tenure, ratios, deltas, rolling averages.  
-3. **Model Training:** compare Random Forest and Boosting models.  
-4. **Evaluation:** ROC-AUC, Precision-Recall, F1-score, business metrics.  
+3. **Model Training:** progressive approach: Logistic Regression → Random Forest → XGBoost. 
+4. **Evaluation:** ROC-AUC, Precision-Recall, business metrics.  
 5. **Inference:** generate churn predictions on new data.
 
+
 ## Results
-- Best model: XGBoost 
+- Best model: XGBoost
+- ROC-AUC of 0.72 (44% improvement over baseline), and PR-AUC of 0.18
+- Business KPI optimization: adjusted threshold of the model to maximize ROI
+- Model and insights were presented to the company as part of the course deliverables.
 
 
 ## Usage
@@ -59,5 +68,9 @@ Python | Pandas | scikit-learn | XGBoost | Matplotlib | Seaborn | PyTest | Poetr
 5. `python3 -m src.feature_engineering` generates the file full_data.parquet (used for training)
 
 Once full_data.parquet is generated, training notebooks and traind & inference scripts are ready to use. Final training notebook is train_boosting.ipynb.
+
+## Project Report
+The full project report is available in `docs/project_report.pdf`.
+
 
    
