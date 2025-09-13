@@ -46,7 +46,7 @@ Python | Pandas | scikit-learn | XGBoost | Matplotlib | Seaborn | PyTest | Poetr
 ## Methodology
 1. **Exploratory Data Analysis (EDA):** understand data distributions, correlations, and missing values.  
 2. **Feature Engineering:** create features like customer tenure, ratios, deltas, rolling averages.  
-3. **Model Training:** progressive approach: Logistic Regression → Random Forest → XGBoost. 
+3. **Model Training:** progressive approach: Linear Regression → Random Forest → XGBoost. 
 4. **Evaluation:** ROC-AUC, Precision-Recall, business metrics.  
 5. **Inference:** generate churn predictions on new data.
 
