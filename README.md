@@ -1,7 +1,7 @@
 # CUSTOMER CHURN PREDICTION
 
 This project was completed as part of Zrive School Data Science program in collaboration with a small team of students for Komorebi AI. 
-Authors: Alejandro Marcos, Álvaro Ortega, Eduardo Ezponda and Maick Mosquera
+Authors: Alejandro Marcos, Álvaro Ortega, Eduardo Ezponda and Maick Mosquera.
 Mentor: Guillermo Santamaría 
 
 ## Objective
