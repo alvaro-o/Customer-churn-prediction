@@ -1,9 +1,12 @@
-# CHURN PREDICTION MODEL
+# CUSTOMER CHURN PREDICTION
 
-Proyecto de predicción de Churn.
+## Objective
+Predict which customers are likely to churn in a subscription-based business using historical account and transaction data.
 
+## Tech Stack
+Python | Pandas | scikit-learn | XGBoost | Matplotlib | Seaborn | PyTest | Poetry
 
-Estructura del proyecto:
+## Project Structure
 
 ```text
 ├── data
@@ -36,66 +39,25 @@ Estructura del proyecto:
 
 ```
 
+## Methodology
+1. **Exploratory Data Analysis (EDA):** understand data distributions, correlations, and missing values.  
+2. **Feature Engineering:** create features like customer tenure, ratios, deltas, rolling averages.  
+3. **Model Training:** compare Random Forest and Boosting models.  
+4. **Evaluation:** ROC-AUC, Precision-Recall, F1-score, business metrics.  
+5. **Inference:** generate churn predictions on new data.
 
-## Notebooks
-
-1. `v1_dataset.ipynb`:
-    - Como definir churn & casos problematicos
-
-2. `eda.ipynb`:
-    - Eda muy basico
-
-3. `v3_feature_engineering.ipynb`:
-   - Añadir features: ratios, medias & deltas ultimos 3 meses, antigúedad, etc.
-  
-4. `training_v2.ipynb`:
-   - Primeras pruebas de entrenamiento
-  
-5. `train_optimized.ipynb`:
-   Notebook de prueba de Random Forest
-
-6. `train_boosting.ipynb`:
-   Notebook de entrenamiento final. Incluye sliding window, evolution of logloss comparada con numero de arboles, evolucion de curvas ROC y Pr y metricas de negocio
+## Results
+- Best model: XGBoost 
 
 
-## src
-
-1. `utils.py`:
-   Funciones & variables que utilizamos en otros .py
-
-2. `prepare_data.py`:
-    Script de limpieza de dataset & añadir target label. Basandose en el notebook `v1_dataset.ipynb`.
-   Utiliza las tablas zrive_advertiser_withdrawals.parquet, zrive_dim_advertiser.parquet y zrive_fct_monthly_snapshot_advertiser.parquet  para generar una tabla final processed_data.parquet
-
-
-3. `feature_engineering.py`:
-   Añade nuevas features (antigüedad, meses desde último contrato, ratios, media últimos 3 meses, delta últimos 3 meses, etc.
-
-4. `train.py`:
-   Entrenamiento del modelo (basandose en train_boosting.ipynb)
-
-5. `inference.py`:
-   Carga el modelo entrenado y hace predicciones
-
-
-## tests
-
-1. `test_feature_engineering.py`:
-    Tests para verificar script feature_engineering.py
-
-2. `test_prepare_data.py`:
-   Test para verificar script test_prepare_data.py
-
-
-## Instrucciones
+## Usage
 
 1. `poetry shell`
 2. `poetry install`
-3. Crear carpeta data y añadir las tablas zrive_advertiser_withdrawals.parquet, zrive_dim_advertiser.parquet y zrive_fct_monthly_snapshot_advertiser.parquet
-4. `python3 -m src.prepare_data` genera la tabla  processed_data.parquet
-5. `python3 -m src.feature_engineering` genera la tabla full_data.parquet (la que se utiliza para entrenar)
+3. Create data folder and add files zrive_advertiser_withdrawals.parquet, zrive_dim_advertiser.parquet and zrive_fct_monthly_snapshot_advertiser.parquet
+4. `python3 -m src.prepare_data` generates the file processed_data.parquet
+5. `python3 -m src.feature_engineering` generates the file full_data.parquet (used for training)
 
-
-Una vez generado full_data.parquet ya se pueden utilizar los notebooks de entrenamiento y scripts de train & inference. El notebook de entrenamiento final es train_boosting.ipynb.
+Once full_data.parquet is generated, training notebooks and traind & inference scripts are ready to use. Final training notebook is train_boosting.ipynb.
 
    
