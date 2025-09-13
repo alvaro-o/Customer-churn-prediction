@@ -1,12 +1,11 @@
 # CUSTOMER CHURN PREDICTION
 
-## Objective
-Predict which customers are likely to churn in a subscription-based business using historical account and transaction data.
-
-## Project Context
 This project was completed as part of Zrive School Data Science program in collaboration with a small team of students for Komorebi AI. 
 Authors: Alejandro Marcos, Álvaro Ortega, Eduardo Ezponda and Maick Mosquera
 Mentor: Guillermo Santamaría 
+
+## Objective
+Predict which customers are likely to churn in a subscription-based business using historical account and transaction data.
 
 ## Tech Stack
 Python | Pandas | scikit-learn | XGBoost | Matplotlib | Seaborn | PyTest | Poetry
